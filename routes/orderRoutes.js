@@ -1,18 +1,9 @@
-const express = require("express");
-const Order = require("../models/Order");
-const { auth } = require("../middleware/authMiddleware");
+const router = require("express").Router();
+const auth = require("../middleware/authMiddleware");
+const ctrl = require("../controllers/orderController");
 
-const router = express.Router();
-
-router.post("/", auth, async (req, res) => {
-  const order = new Order({ ...req.body, userId: req.user.id });
-  await order.save();
-  res.json({ message: "Order placed successfully" });
-});
-
-router.get("/my", auth, async (req, res) => {
-  const orders = await Order.find({ userId: req.user.id });
-  res.json(orders);
-});
+router.post("/", auth, ctrl.createOrder);
+router.get("/my", auth, ctrl.myOrders);
+router.get("/all", auth, ctrl.allOrders);
 
 module.exports = router;

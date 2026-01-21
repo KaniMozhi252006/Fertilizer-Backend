@@ -1,32 +1,14 @@
-const express = require("express");
-const Product = require("../models/Product");
-const { auth, adminOnly } = require("../middleware/authMiddleware");
+const router = require("express").Router();
 
-const router = express.Router();
+const auth = require("../middleware/authMiddleware");
+const admin = require("../middleware/adminMiddleware");
+const ctrl = require("../controllers/productController");
 
-/* ADD PRODUCT */
-router.post("/", auth, adminOnly, async (req, res) => {
-  const product = new Product(req.body);
-  await product.save();
-  res.json({ message: "Product added successfully" });
-});
+router.get("/", ctrl.getProducts);
 
-/* UPDATE PRODUCT */
-router.put("/:id", auth, adminOnly, async (req, res) => {
-  await Product.findByIdAndUpdate(req.params.id, req.body);
-  res.json({ message: "Product updated successfully" });
-});
+router.post("/", auth, admin, ctrl.addProduct);
 
-/* DELETE PRODUCT */
-router.delete("/:id", auth, adminOnly, async (req, res) => {
-  await Product.findByIdAndDelete(req.params.id);
-  res.json({ message: "Product deleted successfully" });
-});
-
-/* VIEW ALL PRODUCTS (PUBLIC) */
-router.get("/", async (req, res) => {
-  const products = await Product.find({ isActive: true });
-  res.json(products);
-});
+router.put("/:id", auth, admin, ctrl.updateProduct);
+router.delete("/:id", auth, admin, ctrl.deleteProduct);
 
 module.exports = router;
