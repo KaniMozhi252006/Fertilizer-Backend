@@ -23,7 +23,10 @@ const orderSchema = new mongoose.Schema({
     type: String,
     default: "Processing"
   },
-  address: String
+  address: {
+    type: String,
+    required: true
+  }
 }, { timestamps: true });
 
 module.exports = mongoose.model("Order", orderSchema);

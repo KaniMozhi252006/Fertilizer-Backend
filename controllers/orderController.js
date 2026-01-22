@@ -12,6 +12,10 @@ exports.createOrder = async (req, res) => {
       return res.status(400).json({ message: "Total amount is required" });
     }
 
+    if (!address || address.trim() === "") {
+      return res.status(400).json({ message: "Address is required" });
+    }
+
     const order = await Order.create({
       userId: req.user.id,
       products,
