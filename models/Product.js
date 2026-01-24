@@ -9,7 +9,7 @@ const productSchema = new mongoose.Schema({
   suitableCrops: [String],
   soilType: [String],
   usageInstructions: String,
-  
+  image: String, // Path to uploaded image
 }, { timestamps: true });
 
 
